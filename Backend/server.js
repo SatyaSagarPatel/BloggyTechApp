@@ -7,6 +7,7 @@ const {
   globalErrorHnadler,
 } = require("./middlewares/globalErrorHandler");
 const { categoriesRouter } = require("./routes/categories/categoriesRouter");
+const postsRouter = require("./routes/posts/postsRouter");
 const app = express();
 // const PORT = 8080;
 dotenv.config();
@@ -22,6 +23,9 @@ app.use("/api/v1/users", usersRouter);
 
 //setup categoryRoute
 app.use("/api/v1/categories", categoriesRouter);
+
+//setup post Routeer
+app.use("/api/v1/posts", postsRouter);
 
 //Not found error handler
 app.use(notFound);
