@@ -31,3 +31,35 @@ exports.createComment = asyncHandler(async (req, resp) => {
     comment,
   });
 });
+
+//@desc Delete comment
+//@route DELETE /api/v1/comment/:commentId
+//@access private
+
+exports.deleteComment = asyncHandler(async (req, resp) => {
+  const commentId = req.params.commentId;
+  await Comment.findByIdAndDelete(commentId);
+  resp.status(201).json({
+    status: "success",
+    message: "Comment successfully deleted!",
+  });
+});
+
+//@desc Update comment
+//@route PUT /api/v1/comment/:commentId
+//@access private
+
+exports.updateComment = asyncHandler(async (req, resp) => {
+  const commentId = req.params.commentId;
+  const message = req.body.message;
+  const updatedComment = await Comment.findByIdAndUpdate(
+    commentId,
+    { message },
+    { new: true, runValidators: true },
+  );
+  resp.status(201).json({
+    status: "success",
+    message: "Comment successfully updated!",
+    updatedComment,
+  });
+});
