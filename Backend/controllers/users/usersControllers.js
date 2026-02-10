@@ -5,6 +5,8 @@ const User = require("../../models/Users/User");
 const bcrypt = require("bcryptjs");
 const generateToken = require("../../utils/generateToken");
 const asyncHandler = require("express-async-handler");
+const sendEmail = require("../../utils/sendemail");
+const crypto = require("crypto");
 exports.register = asyncHandler(async (req, resp, next) => {
   //   resp.json({ message: "User registration controller executed" });
 
@@ -269,5 +271,73 @@ exports.unFollowingUser = asyncHandler(async (req, resp, next) => {
   resp.json({
     status: "success",
     message: "You have unfollowed the user successfully",
+  });
+});
+
+//@desc Forget Password
+//@route POST /api/v1/users/forget-password
+//@access public
+
+exports.forgetPassword = asyncHandler(async (req, resp, next) => {
+  //fetch the email
+  const { email } = req.body;
+  //find email in the DB
+  const userFound = await User.findOne({ email });
+  if (!userFound) {
+    let error = new Error("This email id is not registered with us");
+    next(error);
+    return;
+  }
+  //Get the reset token
+  const resetToken = await userFound.generatePasswordResetToken();
+  //save the token
+  await userFound.save();
+  sendEmail(email, resetToken);
+  //send the response
+  resp.json({
+    status: "success",
+    message: "Password reset token sent to your email successfully",
+  });
+});
+
+//@desc Reeset Password
+//@route POST /api/v1/users/reset-password/:resetToken
+//@access public
+
+exports.resetPassword = asyncHandler(async (req, resp, next) => {
+  //Get the token from params
+  const { resetToken } = req.params;
+  //Get the password
+  const { password } = req.body;
+
+  //Convert resetToken into hashed token
+  const hashedToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  //verify the token with DB
+  const userFound = await User.findOne({
+    passwordResetToken: hashedToken,
+    passwordResetExpires: { $gt: Date.now() },
+  });
+  //if user is not found
+  if (!userFound) {
+    let error = new Error("Password reset token is invalid or expired");
+    next(error);
+    return;
+  }
+
+  //Update the new password
+  const salt = await bcrypt.genSalt(10);
+  userFound.password = await bcrypt.hash(password, salt);
+  userFound.passwordResetToken = undefined;
+  userFound.passwordResetExpires = undefined;
+  await userFound.save();
+
+  //send the response
+  resp.json({
+    status: "success",
+    message: "Password reset token sent to your successfully",
   });
 });

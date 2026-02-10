@@ -9,6 +9,8 @@ const {
 const { categoriesRouter } = require("./routes/categories/categoriesRouter");
 const postsRouter = require("./routes/posts/postsRouter");
 const commentsRouter = require("./routes/comments/commentsRouter");
+
+//create an express app
 const app = express();
 // const PORT = 8080;
 dotenv.config();
