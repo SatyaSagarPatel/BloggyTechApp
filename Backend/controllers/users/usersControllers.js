@@ -7,6 +7,7 @@ const generateToken = require("../../utils/generateToken");
 const asyncHandler = require("express-async-handler");
 const sendEmail = require("../../utils/sendemail");
 const crypto = require("crypto");
+const sendAccountVerificationEmail = require("../../utils/sendAccountVerificationEmail");
 exports.register = asyncHandler(async (req, resp, next) => {
   //   resp.json({ message: "User registration controller executed" });
 
@@ -275,7 +276,7 @@ exports.unFollowingUser = asyncHandler(async (req, resp, next) => {
 });
 
 //@desc Forget Password
-//@route POST /api/v1/users/forget-password
+//@route PUT /api/v1/users/forget-password
 //@access public
 
 exports.forgetPassword = asyncHandler(async (req, resp, next) => {
@@ -300,8 +301,8 @@ exports.forgetPassword = asyncHandler(async (req, resp, next) => {
   });
 });
 
-//@desc Reeset Password
-//@route POST /api/v1/users/reset-password/:resetToken
+//@desc Reset Password
+//@route PUT /api/v1/users/reset-password/:resetToken
 //@access public
 
 exports.resetPassword = asyncHandler(async (req, resp, next) => {
@@ -339,5 +340,71 @@ exports.resetPassword = asyncHandler(async (req, resp, next) => {
   resp.json({
     status: "success",
     message: "Password reset token sent to your successfully",
+  });
+});
+
+//@desc Send Account Verification Mail
+//@route POST /api/v1/users/account-verification-email
+//@access private
+
+exports.accountVerificationEmail = asyncHandler(async (req, resp, next) => {
+  //Find  the current user's email
+  const currentUser = await User.findById(req?.userAuth?._id);
+  if (!currentUser) {
+    let error = new Error("User not found");
+    next(error);
+    return;
+  }
+
+  //Get the token from the current user object
+  const verifyToken = await currentUser.generateAccountVerificationToken();
+
+  //resave the user
+  await currentUser.save();
+
+  //send the verification email
+  sendAccountVerificationEmail(currentUser.email, verifyToken);
+
+  //send the response
+  resp.json({
+    status: "success",
+    message: `Account verification email has been sent to your registered email id ${currentUser.email}`,
+  });
+});
+
+//@desc Account Token Verification
+//@route PUT /api/v1/users/verify-account/:verifyToken
+//@access private
+
+exports.verifyAccount = asyncHandler(async (req, resp, next) => {
+  //Get the token from paarams
+  const { verifyToken } = req.params;
+  //Convert token into hashed form
+  let cryptoToken = crypto
+    .createHash("sha256")
+    .update(verifyToken)
+    .digest("hex");
+
+  const userFound = await User.findOne({
+    accountVerificationToken: cryptoToken,
+    accountVerificationExpires: { $gt: Date.now() },
+  });
+
+  if (!userFound) {
+    let error = new Error("Acount token invalid or expired");
+    next(error);
+    return;
+  }
+  //Update the user
+  userFound.isVerified = true;
+  userFound.accountVerificationToken = undefined;
+  userFound.accountVerificationExpires = undefined;
+
+  //resave the user
+  await userFound.save();
+  //send the response
+  resp.json({
+    status: "success",
+    mesage: "Account successfully verified",
   });
 });
