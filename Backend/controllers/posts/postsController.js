@@ -78,7 +78,10 @@ exports.getAllPosts = asyncHandler(async (req, resp) => {
   const query = {
     author: { $nin: blockingUsersIds },
     $or: [
-      { scheduledPublish: { $lte: currentDateTime }, scheduledPublish: null },
+      {
+        scheduledPublished: { $lte: currentDateTime },
+        scheduledPublished: null,
+      },
     ],
   };
 
