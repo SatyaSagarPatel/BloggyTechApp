@@ -25,6 +25,7 @@ exports.createPost = asyncHandler(async (req, resp, next) => {
     content,
     category: categoryId,
     author: req?.userAuth?._id,
+    image: req.file.path,
   });
 
   //Update user by adding post in it
@@ -49,6 +50,8 @@ exports.createPost = asyncHandler(async (req, resp, next) => {
     user,
     catg,
   });
+  console.log("File Uploaded:", req.file);
+  resp.send("done");
 });
 
 //@desc Get All Posts
@@ -86,7 +89,11 @@ exports.getAllPosts = asyncHandler(async (req, resp) => {
   };
 
   //fetch those posts whose author is not in blockingUsersIds
-  const allPosts = await Post.find(query);
+  const allPosts = await Post.find(query).populate({
+    path: "author",
+    model: "User",
+    select: "email username role",
+  });
 
   resp.json({
     status: "success",
