@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const dotenv = require("dotenv");
 const usersRouter = require("./routes/users/usersRouter");
 const connectDB = require("./config/database");
@@ -20,6 +21,9 @@ connectDB();
 
 //setup middleware
 app.use(express.json());
+
+//cors middleware
+app.use(cors());
 
 //setup router
 app.use("/api/v1/users", usersRouter);
