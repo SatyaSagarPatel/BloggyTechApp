@@ -7,7 +7,7 @@ const isLoggedIn = (req, resp, next) => {
   console.log("Token", token);
 
   //verify token
-  jwt.verify(token, "secretkey", async (err, decoded) => {
+  jwt.verify(token, process.env.JWT_KEY, async (err, decoded) => {
     // console.log("decoded:", decoded);
     //if unsuccessful, then send the error message
     if (err) {

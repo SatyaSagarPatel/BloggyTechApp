@@ -51,7 +51,6 @@ exports.createPost = asyncHandler(async (req, resp, next) => {
     catg,
   });
   console.log("File Uploaded:", req.file);
-  resp.send("done");
 });
 
 //@desc Get All Posts
@@ -93,7 +92,7 @@ exports.getAllPosts = asyncHandler(async (req, resp) => {
     path: "author",
     model: "User",
     select: "email username role",
-  });
+  }).populate("category");
 
   resp.json({
     status: "success",
@@ -111,7 +110,9 @@ exports.getPost = asyncHandler(async (req, resp) => {
   const postId = req.params.id;
 
   //fetch the post corresponding to this postId
-  const post = await Post.findById(postId);
+  const post = await Post.findById(postId)
+    .populate("author")
+    .populate("category");
 
   if (post) {
     resp.json({
@@ -126,6 +127,24 @@ exports.getPost = asyncHandler(async (req, resp) => {
       post,
     });
   }
+});
+
+//@desc Get 4 Posts
+//@route GET /api/v1/posts
+//@access public
+
+exports.getPublicPosts = asyncHandler(async (req, resp) => {
+  //fetch
+  const posts = await Post.find({})
+    .sort({ createdAt: -1 })
+    .limit(4)
+    .populate("category")
+    .populate("author");
+  resp.status(201).json({
+    status: "success",
+    message: "Post successfully created",
+    posts,
+  });
 });
 
 //@desc Delete Post

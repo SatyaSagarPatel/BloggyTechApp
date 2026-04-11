@@ -44,11 +44,11 @@ const Login = () => {
     }
   }, [userAuth?.userInfo?.token]);
   return (
-    <section className="py-16 xl:pb-56 bg-white overflow-hidden">
-      <div className="container px-4 mx-auto">
+    <section className="py-10 xl:pb-56 bg-white overflow-hidden">
+      <div className="pb-8 container px-4 mx-auto bg-green-200 w-1/2 rounded-xl">
         <div className="text-center max-w-md mx-auto">
-          <a className="mb-36 inline-block" href="#">
-            <img src="flaro-assets/logos/flaro-logo-black-xl.svg" alt="" />
+          <a className="mb-5 inline-block" href="#">
+            <img src="flaro-assets/logos/flaro-logo-black-xl.svg" alt="pic" />
           </a>
           <h2 className="mb-4 text-6xl md:text-7xl text-center">
             Login to your account

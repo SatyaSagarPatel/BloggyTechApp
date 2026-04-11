@@ -11,6 +11,7 @@ const {
   disLikePost,
   clapPost,
   schedulePost,
+  getPublicPosts,
 } = require("../../controllers/posts/postsController");
 const isLoggedIn = require("../../middlewares/isLoggedin");
 const isAccountVerified = require("../../middlewares/isAccountVerified");
@@ -29,6 +30,9 @@ postsRouter.post(
 
 //Get ALL POSTS router
 postsRouter.get("/", isLoggedIn, getAllPosts);
+
+//get only 4 posts
+postsRouter.get("/public", getPublicPosts);
 
 //Get a POST router
 postsRouter.get("/:id", getPost);

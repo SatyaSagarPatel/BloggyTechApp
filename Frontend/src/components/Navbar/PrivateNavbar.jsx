@@ -35,7 +35,7 @@ const PrivateNavbar = () => {
           {/* Right Side */}
           <div className="flex items-center space-x-6 relative">
             <Link
-              to="/create-post"
+              to="/add-post"
               className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
             >
               <FaPlus />

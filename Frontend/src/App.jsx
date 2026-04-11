@@ -6,6 +6,10 @@ import PrivateNavbar from "./components/Navbar/PrivateNavbar";
 import PublicNavbar from "./components/Navbar/PublicNavbar";
 import { useSelector } from "react-redux";
 import ProtectedRoute from "./components/AuthRoute/ProtectedRoute";
+import PublicPosts from "./components/Posts/PublicPosts";
+import AddPost from "./components/Posts/AddPost";
+import Register from "./components/Users/Register";
+import PostDetails from "./components/Posts/PostDetails";
 
 export default function App() {
   const { userAuth } = useSelector((state) => state.users);
@@ -17,11 +21,28 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route
           path="/user-profile"
           element={
             <ProtectedRoute>
               <UserProfile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/add-post"
+          element={
+            <ProtectedRoute>
+              <AddPost />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/posts/:postId"
+          element={
+            <ProtectedRoute>
+              <PostDetails />
             </ProtectedRoute>
           }
         />

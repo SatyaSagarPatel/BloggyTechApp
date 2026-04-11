@@ -1,5 +1,6 @@
 import React from "react";
 import Register from "../Users/Register";
+import PublicPosts from "../Posts/PublicPosts";
 
 const Homepage = () => {
   return (
@@ -74,64 +75,67 @@ const Homepage = () => {
     //     </div>
     //   </section>
     // </div>
-    <section className="relative bg-white overflow-hidden py-20">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-wrap items-center">
-          {/* LEFT SECTION */}
-          <div className="w-full lg:w-1/2 mb-16 lg:mb-0">
-            <span className="inline-block px-3 py-1 mb-6 text-xs font-semibold text-green-600 bg-green-100 rounded-full">
-              HEADER
-            </span>
+    <div>
+      <section className="relative bg-white overflow-hidden py-10">
+        <div className="container mx-auto">
+          <div className="flex flex-wrap items-center">
+            {/* LEFT SECTION */}
+            <div className="w-full lg:w-2/3 mb-16 lg:mb-0">
+              <span className="inline-block px-3 py-1 mb-6 text-xs font-semibold text-green-600 bg-green-100 rounded-full">
+                HEADER
+              </span>
 
-            <h1 className="mb-6 text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-              A small business is only as good as its tools.
-            </h1>
+              <h1 className="mb-6 text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+                A small business is only as good as its tools.
+              </h1>
 
-            <p className="mb-8 text-lg text-gray-600">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            </p>
+              <p className="mb-8 text-lg text-gray-600">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              </p>
 
-            <ul className="space-y-6">
-              <li className="flex items-start">
-                <img
-                  className="mr-4 mt-1 w-5 h-5"
-                  src="/flex-ui-assets/elements/checkbox-green.svg"
-                  alt="check"
-                />
-                <p className="text-lg text-gray-700">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                </p>
-              </li>
+              <ul className="space-y-6">
+                <li className="flex items-start">
+                  <img
+                    className="mr-4 mt-1 w-5 h-5"
+                    src="/flex-ui-assets/elements/checkbox-green.svg"
+                    alt="check"
+                  />
+                  <p className="text-lg text-gray-700">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  </p>
+                </li>
 
-              <li className="flex items-start">
-                <img
-                  className="mr-4 mt-1 w-5 h-5"
-                  src="/flex-ui-assets/elements/checkbox-green.svg"
-                  alt="check"
-                />
-                <p className="text-lg text-gray-700">
-                  Suspendisse mollis tincidunt.
-                </p>
-              </li>
+                <li className="flex items-start">
+                  <img
+                    className="mr-4 mt-1 w-5 h-5"
+                    src="/flex-ui-assets/elements/checkbox-green.svg"
+                    alt="check"
+                  />
+                  <p className="text-lg text-gray-700">
+                    Suspendisse mollis tincidunt.
+                  </p>
+                </li>
 
-              <li className="flex items-start">
-                <img
-                  className="mr-4 mt-1 w-5 h-5"
-                  src="/flex-ui-assets/elements/checkbox-green.svg"
-                  alt="check"
-                />
-                <p className="text-lg text-gray-700">
-                  Praesent varius justo vel justo pulvinar.
-                </p>
-              </li>
-            </ul>
+                <li className="flex items-start">
+                  <img
+                    className="mr-4 mt-1 w-5 h-5"
+                    src="/flex-ui-assets/elements/checkbox-green.svg"
+                    alt="check"
+                  />
+                  <p className="text-lg text-gray-700">
+                    Praesent varius justo vel justo pulvinar.
+                  </p>
+                </li>
+              </ul>
+            </div>
+
+            {/* RIGHT SECTION */}
+            <Register />
           </div>
-
-          {/* RIGHT SECTION */}
-          <Register />
         </div>
-      </div>
-    </section>
+      </section>
+      <PublicPosts />
+    </div>
   );
 };
 
