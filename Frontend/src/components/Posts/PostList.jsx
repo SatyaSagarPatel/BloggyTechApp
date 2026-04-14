@@ -1,17 +1,18 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPublicPostAction } from "../../redux/slices/posts/postSlices";
+import { fetchPrivatePostAction } from "../../redux/slices/posts/postSlices";
 import LoadingComponent from "../Alert/LoadingComponent";
 
-const PublicPosts = () => {
+const PostList = () => {
   //redux store communication
   const dispatch = useDispatch();
   const { posts, error, success, loading } = useSelector(
     (state) => state?.posts,
   );
   useEffect(() => {
-    dispatch(fetchPublicPostAction());
+    dispatch(fetchPrivatePostAction());
+    console.log("private post", posts);
   }, [dispatch]);
 
   return (
@@ -42,21 +43,17 @@ const PublicPosts = () => {
                 <LoadingComponent />
               ) : error ? (
                 <h3 className="text-red-500 text-center ">{error?.message}</h3>
-              ) : posts?.posts?.length <= 0 ? (
+              ) : posts?.allPosts?.length <= 0 ? (
                 <h3>No post Found</h3>
               ) : (
-                posts?.posts?.map((post) => {
+                posts?.allPosts?.map((post) => {
                   return (
                     <div key={post?._id} className="w-full md:w-1/2 px-4 mb-8">
                       <a
                         className="block mb-6 overflow-hidden rounded-md"
                         href="#"
                       >
-                        <img
-                          className="w-full"
-                          src={post?.image}
-                          // src="https://cdn.pixabay.com/photo/2017/11/27/21/31/computer-2982270_960_720.jpg"
-                        />
+                        <img className="w-full" src={post?.image} />
                       </a>
                       <div className="mb-4">
                         <a
@@ -106,4 +103,4 @@ const PublicPosts = () => {
   );
 };
 
-export default PublicPosts;
+export default PostList;

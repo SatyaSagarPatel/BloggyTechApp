@@ -1,20 +1,40 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getPostAction } from "../../redux/slices/posts/postSlices";
-import { useParams } from "react-router-dom";
+import {
+  deletePostAction,
+  getPostAction,
+} from "../../redux/slices/posts/postSlices";
+import { useNavigate, useParams } from "react-router-dom";
 import LoadingComponent from "../Alert/LoadingComponent";
 import ErrorMsg from "../Alert/ErrorMsg";
 import PostStats from "./PostStats";
 import calculateReadingTime from "../../utils/calculateReadingTime";
 const PostDetails = () => {
+  //navigate
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { post, error, success, loading } = useSelector(
     (state) => state?.posts,
   );
+  const { userAuth } = useSelector((state) => state?.users);
   const { postId } = useParams();
   useEffect(() => {
     dispatch(getPostAction(postId));
   }, [dispatch]);
+
+  //get the creator id of the post
+  const creator = post?.post?.author?._id.toString();
+  //get the loggedin current user
+  const loggedInUser = userAuth?.userInfo?._id.toString();
+
+  //check whether the loggedin user is  the author of post or  ot
+  const isCreator = creator === loggedInUser;
+  const deletePostHandler = () => {
+    dispatch(deletePostAction(postId));
+    if (success) {
+      navigate("/posts");
+    }
+  };
   return (
     <>
       {loading ? (
@@ -41,15 +61,15 @@ const PostDetails = () => {
                 </p>
                 <span className="mx-1 text-green-500">•</span>
                 <p className="inline-block font-medium text-green-500">
-                  {post?.post?.createdAt}
+                  {new Date(post?.post?.createdAt).toDateString()}
                 </p>
               </div>
-              <h2 className="mb-4 text-3xl font-bold leading-tight tracking-tighter md:text-xl">
+              <h2 className="mt-3 mb-4 text-3xl font-bold leading-tight tracking-tighter md:text-xl">
                 {post?.post?.title}
               </h2>
-              <p className="mb-10 text-lg font-medium md:text-xl text-coolGray-500">
+              {/* <p className="mb-10 text-lg font-medium md:text-xl text-coolGray-500">
                 {post?.post?.content}
-              </p>
+              </p> */}
               <div className="flex items-center justify-center -mx-2 text-left">
                 <div className="w-auto px-2">
                   <img
@@ -61,11 +81,11 @@ const PostDetails = () => {
                 </div>
                 <div className="w-auto px-2">
                   <h4 className="text-base font-bold md:text-lg text-coolGray-800">
-                    John Doe
+                    {post?.post?.author?.username}
                   </h4>
-                  <p className="text-base md:txet-lg text-coolGray-500">
+                  {/* <p className="text-base md:txet-lg text-coolGray-500">
                     12 October 2021
-                  </p>
+                  </p> */}
                 </div>
               </div>
             </div>
@@ -99,40 +119,46 @@ const PostDetails = () => {
               <p className="pb-10 mb-8 text-lg font-medium border-b md:text-xl text-coolGray-500">
                 {post?.post?.content}
               </p>
-              <div className="flex justify-end mb-4">
-                <button className="p-2 mr-2 text-gray-500 hover:text-gray-700">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="w-6 h-6"
+              {/*Delete and update icons */}
+              {isCreator && (
+                <div className="flex justify-end mb-4">
+                  <button className="p-2 mr-2 text-gray-500 hover:text-gray-700">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={deletePostHandler}
+                    className="p-2 mr-2 text-gray-500 hover:text-gray-700"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
-                    />
-                  </svg>
-                </button>
-                <button className="p-2 mr-2 text-gray-500 hover:text-gray-700">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                    />
-                  </svg>
-                </button>
-              </div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              )}
               <h3 className="mb-4 text-2xl font-semibold md:text-3xl text-coolGray-800">
                 Add a comment
               </h3>

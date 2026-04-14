@@ -1,20 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FaCamera } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserProfileAction } from "../../redux/slices/users/userSlices";
+import LoadingComponent from "../Alert/LoadingComponent";
+import ErrorMsg from "../Alert/ErrorMsg";
 
 const UserProfile = () => {
-  const user = {
-    name: "Ricardo Cooper",
-    phone: "(555) 123-4567",
-    email: "ricardocooper@example.com",
-    title: "Senior Front-End Developer",
-    team: "Product Development",
-    location: "San Francisco",
-    sits: "Oasis, 4th floor",
-    salary: "$145,000",
-    birthday: "June 8, 1990",
-    about:
-      "Tincidunt quam neque in cursus viverra orci, dapibus nec tristique.",
-  };
+  const dispatch = useDispatch();
+
+  const { profile, loading, error } = useSelector((state) => state?.users);
+
+  useEffect(() => {
+    dispatch(getUserProfileAction());
+  }, [dispatch]);
+
+  if (loading) return <LoadingComponent />;
+  if (error) return <ErrorMsg message={error?.message} />;
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -37,7 +38,7 @@ const UserProfile = () => {
             {/* Avatar */}
             <div className="relative">
               <img
-                src="https://randomuser.me/api/portraits/men/32.jpg"
+                src={profile?.profilePicture || "https://randomuser.me/api/portraits/men/32.jpg"}
                 className="w-32 aspect-square rounded-full object-cover border-4 border-white"
                 alt=""
               />
@@ -51,12 +52,12 @@ const UserProfile = () => {
             {/* Username + Buttons */}
             <div className="ml-6 flex justify-between items-end w-full pb-2">
               {/* Username slightly lower */}
-              <h2 className="text-2xl font-bold">{user.name}</h2>
+              <h2 className="text-2xl font-bold">{profile?.username || "Unknown"}</h2>
 
               {/* Action Buttons */}
               <div className="space-x-2">
                 <button className="px-4 py-2 border rounded-lg text-sm">
-                  👁 20
+                  👁 {profile?.profileViewers?.length || 0}
                 </button>
 
                 <button className="px-4 py-2 border rounded-lg text-sm">
@@ -70,6 +71,9 @@ const UserProfile = () => {
                 <button className="px-4 py-2 border rounded-lg text-sm">
                   Follow
                 </button>
+                <button className="px-4 py-2 border rounded-lg text-sm">
+                  Unfollow
+                </button>
               </div>
             </div>
           </div>
@@ -82,46 +86,26 @@ const UserProfile = () => {
           {/* Left */}
           <div className="space-y-6">
             <div>
-              <p className="text-gray-500 text-sm">Phone</p>
-              <p>{user.phone}</p>
+              <p className="text-gray-500 text-sm">Email</p>
+              <p>{profile?.email || "N/A"}</p>
             </div>
 
             <div>
-              <p className="text-gray-500 text-sm">Title</p>
-              <p>{user.title}</p>
-            </div>
-
-            <div>
-              <p className="text-gray-500 text-sm">Location</p>
-              <p>{user.location}</p>
-            </div>
-
-            <div>
-              <p className="text-gray-500 text-sm">Salary</p>
-              <p>{user.salary}</p>
+              <p className="text-gray-500 text-sm">Role</p>
+              <p>{profile?.role || "N/A"}</p>
             </div>
           </div>
 
           {/* Right */}
           <div className="space-y-6">
             <div>
-              <p className="text-gray-500 text-sm">Email</p>
-              <p>{user.email}</p>
+              <p className="text-gray-500 text-sm">Location</p>
+              <p>{profile?.location || "N/A"}</p>
             </div>
 
             <div>
-              <p className="text-gray-500 text-sm">Team</p>
-              <p>{user.team}</p>
-            </div>
-
-            <div>
-              <p className="text-gray-500 text-sm">Sits</p>
-              <p>{user.sits}</p>
-            </div>
-
-            <div>
-              <p className="text-gray-500 text-sm">Birthday</p>
-              <p>{user.birthday}</p>
+              <p className="text-gray-500 text-sm">Account Level</p>
+              <p>{profile?.accountLevel || "N/A"}</p>
             </div>
           </div>
         </div>
@@ -129,7 +113,7 @@ const UserProfile = () => {
         {/* About */}
         <div className="mt-10">
           <h3 className="text-lg font-semibold mb-2">About</h3>
-          <p className="text-gray-600">{user.about}</p>
+          <p className="text-gray-600">{profile?.bio || "No bio available."}</p>
         </div>
       </div>
     </div>

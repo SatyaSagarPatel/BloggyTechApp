@@ -10,6 +10,7 @@ import PublicPosts from "./components/Posts/PublicPosts";
 import AddPost from "./components/Posts/AddPost";
 import Register from "./components/Users/Register";
 import PostDetails from "./components/Posts/PostDetails";
+import PostList from "./components/Posts/PostList";
 
 export default function App() {
   const { userAuth } = useSelector((state) => state.users);
@@ -43,6 +44,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <PostDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/posts"
+          element={
+            <ProtectedRoute>
+              <PostList />
             </ProtectedRoute>
           }
         />

@@ -88,11 +88,13 @@ exports.getAllPosts = asyncHandler(async (req, resp) => {
   };
 
   //fetch those posts whose author is not in blockingUsersIds
-  const allPosts = await Post.find(query).populate({
-    path: "author",
-    model: "User",
-    select: "email username role",
-  }).populate("category");
+  const allPosts = await Post.find(query)
+    .populate({
+      path: "author",
+      model: "User",
+      select: "email username role",
+    })
+    .populate("category");
 
   resp.json({
     status: "success",
@@ -154,6 +156,16 @@ exports.getPublicPosts = asyncHandler(async (req, resp) => {
 exports.deletePost = asyncHandler(async (req, resp) => {
   //Get the id
   const postId = req.params.id;
+
+  //fetch the post object from DB
+  const post = await Post.findById(postId);
+
+  const isAuthor =
+    req.userAuth?._id.toString() === post?.author?._id.toString();
+
+  if (!isAuthor) {
+    throw Error("Action Denied, you are not creator of this post!");
+  }
 
   //Delete this post from the DB
   await Post.findByIdAndDelete(postId);

@@ -46,6 +46,8 @@ const Register = () => {
       navigate("/login");
     }
   }, [user?.status]);
+  const isStandalone = window.location.pathname === "/register";
+
   return (
     // <form className="w-full lg:w-1/2 ">
     //   <div className="flex flex-col items-center p-10 xl:px-24 xl:py-24">
@@ -59,7 +61,7 @@ const Register = () => {
     //     </h2>
     //     </div>
     // </form>
-    <div className="w-full lg:w-1/3 flex justify-center py-5">
+    <div className={isStandalone ? "min-h-[calc(100vh-64px)] bg-gray-50 flex items-center justify-center w-full" : "w-full lg:w-1/3 flex justify-center py-5"}>
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-md bg-white rounded-2xl shadow-xl p-10"
