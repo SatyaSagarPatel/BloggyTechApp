@@ -25,6 +25,10 @@ app.use(express.json());
 //cors middleware
 app.use(cors());
 
+app.get("/", (req, res) => {
+  res.send("Backend running on Vercel");
+});
+
 //setup router
 app.use("/api/v1/users", usersRouter);
 
@@ -43,8 +47,6 @@ app.use(notFound);
 //setup globl error handler
 app.use(globalErrorHnadler);
 
-app.get("/", (req, res) => {
-  res.send("Backend running on Vercel");
-});
+
 
 module.exports = app;
