@@ -5,7 +5,7 @@ const User = require("../../models/Users/User");
 const bcrypt = require("bcryptjs");
 const generateToken = require("../../utils/generateToken");
 const asyncHandler = require("express-async-handler");
-const sendEmail = require("../../utils/sendemail");
+const sendEmail = require("../../utils/sendEmail");
 const crypto = require("crypto");
 const sendAccountVerificationEmail = require("../../utils/sendAccountVerificationEmail");
 exports.register = asyncHandler(async (req, resp, next) => {
