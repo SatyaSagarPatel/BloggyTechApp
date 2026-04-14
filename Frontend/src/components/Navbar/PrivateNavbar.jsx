@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import { useDispatch } from "react-redux";
@@ -6,24 +6,11 @@ import { LogoutAction } from "../../redux/slices/users/userSlices";
 
 const PrivateNavbar = () => {
   const [open, setOpen] = useState(false);
-  const dropdownRef = useRef(null);
   const dispatch = useDispatch();
   const logoutHandler = () => {
     dispatch(LogoutAction());
     window.location.reload();
   };
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [dropdownRef]);
 
   return (
     <nav className="bg-white shadow sticky top-0 z-50">
@@ -86,7 +73,7 @@ const PrivateNavbar = () => {
               <FaPlus />
               Add New Post
             </Link>
-            <div className="relative" ref={dropdownRef}>
+            <div className="relative">
               {/* Avatar */}
               <img
                 src="https://randomuser.me/api/portraits/men/32.jpg"
