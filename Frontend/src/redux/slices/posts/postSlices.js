@@ -21,7 +21,7 @@ export const fetchPublicPostAction = createAsyncThunk(
     try {
       console.log("started communication");
       const { data } = await axios.get(
-        "http://localhost:3000/api/v1/posts/public",
+        "https://bloggy-tech-app-backend.vercel.app/api/v1/posts/public",
       );
       // localStorage.setItem("userInfo", JSON.stringify(data));
       return data;
@@ -45,7 +45,7 @@ export const fetchPrivatePostAction = createAsyncThunk(
         },
       };
       const { data } = await axios.get(
-        "http://localhost:3000/api/v1/posts",
+        "https://bloggy-tech-app-backend.vercel.app/api/v1/posts",
         config,
       );
       // localStorage.setItem("userInfo", JSON.stringify(data));
@@ -64,7 +64,7 @@ export const getPostAction = createAsyncThunk(
     try {
       console.log("started communication");
       const { data } = await axios.get(
-        `http://localhost:3000/api/v1/posts/${postId}`,
+        `https://bloggy-tech-app-backend.vercel.app/api/v1/posts/${postId}`,
       );
       // localStorage.setItem("userInfo", JSON.stringify(data));
       return data;
@@ -94,7 +94,7 @@ export const addPostAction = createAsyncThunk(
       };
 
       const { data } = await axios.post(
-        "http://localhost:3000/api/v1/posts",
+        "https://bloggy-tech-app-backend.vercel.app/api/v1/posts",
         formData,
         config,
       );
@@ -120,7 +120,7 @@ export const deletePostAction = createAsyncThunk(
       };
 
       const { data } = await axios.delete(
-        `http://localhost:3000/api/v1/posts/${postId}`,
+        `https://bloggy-tech-app-backend.vercel.app/api/v1/posts/${postId}`,
         config,
       );
 

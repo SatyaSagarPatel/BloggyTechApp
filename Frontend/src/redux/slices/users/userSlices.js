@@ -31,7 +31,7 @@ export const loginAction = createAsyncThunk(
     try {
       console.log("started communication");
       const { data } = await axios.post(
-        "http://localhost:3000/api/v1/users/login",
+        "https://bloggy-tech-app-backend.vercel.app/api/v1/users/login",
         payLoad,
       );
       localStorage.setItem("userInfo", JSON.stringify(data));
@@ -50,7 +50,7 @@ export const registerAction = createAsyncThunk(
     try {
       console.log("started communication");
       const { data } = await axios.post(
-        "http://localhost:3000/api/v1/users/register",
+        "https://bloggy-tech-app-backend.vercel.app/api/v1/users/register",
         payLoad,
       );
 
@@ -78,7 +78,7 @@ export const getUserProfileAction = createAsyncThunk(
         },
       };
       const { data } = await axios.get(
-        "http://localhost:3000/api/v1/users/profile",
+        "https://bloggy-tech-app-backend.vercel.app/api/v1/users/profile",
         config,
       );
       return data;

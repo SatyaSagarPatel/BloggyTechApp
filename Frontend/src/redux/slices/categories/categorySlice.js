@@ -21,7 +21,7 @@ export const fetchCategoriesAction = createAsyncThunk(
     try {
       console.log("started communication");
       const { data } = await axios.get(
-        "http://localhost:3000/api/v1/categories",
+        "https://bloggy-tech-app-backend.vercel.app/api/v1/categories",
       );
       // localStorage.setItem("userInfo", JSON.stringify(data));
       return data;
