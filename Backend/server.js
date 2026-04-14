@@ -43,6 +43,8 @@ app.use(notFound);
 //setup globl error handler
 app.use(globalErrorHnadler);
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`server started at ${PORT}`);
+app.get("/", (req, res) => {
+  res.send("Backend running on Vercel");
 });
+
+module.exports = app;
