@@ -17,7 +17,11 @@ const app = express();
 dotenv.config();
 
 //establish connection to database
-connectDB();
+// connectDB();
+app.use(async (req, res, next) => {
+  await connectDB();
+  next();
+});
 
 //setup middleware
 app.use(express.json());
@@ -46,7 +50,5 @@ app.use(notFound);
 
 //setup globl error handler
 app.use(globalErrorHnadler);
-
-
 
 module.exports = app;
