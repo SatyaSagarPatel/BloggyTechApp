@@ -22,7 +22,7 @@ const sendAccountVerificationEmail = async (to, verificationToken) => {
       subject: "Account Verification Token",
       html: `<p> You are receiving this email because you (or someone else) have requested to verify your account.</p>
             <p>Please click on the following link, or paste this into your browser to complete the process:</p>
-            <p>https://localhost:3000/reset-password/${verificationToken}</p>
+            <p>https://bloggy-tech-app-backend.vercel.app/reset-password/${verificationToken}</p>
             <p>If you did not request this, please ignore this email and your password will remain unchanged.</p> `,
     };
 
