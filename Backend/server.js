@@ -25,6 +25,10 @@ app.use(express.json());
 //cors middleware
 app.use(cors());
 
+app.get("/", (req, res) => {
+  res.send("Backend running on Vercel");
+});
+
 //setup router
 app.use("/api/v1/users", usersRouter);
 
@@ -42,7 +46,7 @@ app.use(notFound);
 
 //setup globl error handler
 app.use(globalErrorHnadler);
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`server started at ${PORT}`);
-});
+
+
+
+module.exports = app;
